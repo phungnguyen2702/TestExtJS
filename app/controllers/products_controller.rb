@@ -66,7 +66,8 @@ class ProductsController < ApplicationController
 
   ############################ Def ExtJS
   def create_extjs
-    @product = Product.new()
+    @product = Product.new(title: params['title'], image: params['image'],
+                              description: params['description'],price: params['price'])
     @product.save
   end
   
@@ -89,7 +90,7 @@ class ProductsController < ApplicationController
     end
     
     # Never trust parameters from the scary internet, only allow the white list through.
-    def product_params
-      params.require(:product).permit(:title, :image, :description, :price)
-    end
+    # def product_params
+    #   params.require(:product).permit(:title, :image, :description, :price)
+    # end
 end

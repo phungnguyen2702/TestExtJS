@@ -78,9 +78,8 @@ class ProductsController < ApplicationController
   end
   def destroy_extjs
     #binding.pry
-    @product = Product.find_by_id(params['id'])
-    @product.destroy
-  end
+    Product.where(:Delete => true).destroy_all
+  end 
 
 
   private

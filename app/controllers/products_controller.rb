@@ -77,11 +77,11 @@ class ProductsController < ApplicationController
 
   end
   def destroy_extjs
-    #binding.pry
-    Product.where(:Delete => true).destroy_all
-  end 
-
-
+    ids = params['items'].split(',')
+    ids.to_a.each do |item|
+      Product.where(id: item.to_i).destroy_all
+    end
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product

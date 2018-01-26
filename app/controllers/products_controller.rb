@@ -74,13 +74,12 @@ class ProductsController < ApplicationController
   def update_extjs
     @product = Product.find_by_id(params["id"])
     @product.update_column :"#{params["field"]}", params["value"]
-
   end
   def destroy_extjs
-    ids = params['items'].split(',')
-    ids.to_a.each do |item|
-      Product.where(id: item.to_i).destroy_all
-    end
+    arr = params['items'].split(',')
+    arr.collect!{ |item| item.to_i}
+    #Product.where(id: arr).destroy_all
+    Product.destroy(arr)
   end
   private
     # Use callbacks to share common setup or constraints between actions.

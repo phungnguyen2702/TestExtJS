@@ -15,7 +15,6 @@ store.load();
 //editor 
 var text_edit = new Ext.form.TextField();
 var number_edit = new Ext.form.NumberField();
-var bool_edit;
 //new row
 var ds_model = Ext.data.Record.create([
   'id',
@@ -43,6 +42,7 @@ Ext.onReady( function(){
     },
     singleSelect: false
   });
+  
   var grid = new Ext.grid.EditorGridPanel({
     listeners: {
       afteredit: function(e){
@@ -66,8 +66,8 @@ Ext.onReady( function(){
     renderTo:  Ext.get("table_products"),
     frame:true,
     title: 'Product Database',
-    height:650,
-    width:620,
+    height: 350,
+    width: 535,
     store: store,
     clickstoEdit: 1,
     sm: selModel,
@@ -82,48 +82,7 @@ Ext.onReady( function(){
     ],
     tbar:[
       {
-        text: 'Delete',
-        cls: 'x-btn-text-icon',
-        handler: function(){
-          var sm = grid.getSelectionModel();
-          
-          if (sm.hasSelection()){
-            var sel = sm.selections.items;
-            var ids ='';
-            for(var i = 0; i < sel.length; i++){
-              ids += sel[i].id
-              if(i != sel.length-1)
-                 ids += ",";
-            }
-            Ext.Msg.show({
-              title: 'Remove Product',
-              buttons: Ext.MessageBox.YESNOCANCEL,
-              msg: 'Do you want Remove ?',
-              fn: function(btn){
-                if (btn == 'yes'){
-                  Ext.Ajax.request({
-                    url: destroy_url,
-                    method: 'POST',
-                    params: {
-                      action: 'delete',
-                      items: ids
-                    },
-                    success: function(resp,opt){
-                      //grid.getStore().remove(sel);
-                      store.reload();                        
-                    },
-                    failure: function(resp,opt){
-                      Ext.Msg.alert('Error', 'Unable to delete product');
-                    }
-                  });
-                }
-              }
-            });
-          };
-        }
-      },
-      {
-        text: 'Add Form',
+        text: 'Add',
         cls: 'x-btn-text-icon',
         handler: function(){
           var win = new  Ext.Window({
@@ -211,6 +170,46 @@ Ext.onReady( function(){
             }]
           });
           win.show();
+        }
+      },
+      {
+        text: 'Delete',
+        cls: 'x-btn-text-icon',
+        handler: function(){
+          var sm = grid.getSelectionModel();
+          if (sm.hasSelection()){
+            var sel = sm.selections.items;
+            var ids ='';
+            for(var i = 0; i < sel.length; i++){
+              ids += sel[i].id
+              if(i != sel.length-1)
+                 ids += ",";
+            }
+            Ext.Msg.show({
+              title: 'Remove Product',
+              buttons: Ext.MessageBox.YESNOCANCEL,
+              msg: 'Do you want Remove ?',
+              fn: function(btn){
+                if (btn == 'yes'){
+                  Ext.Ajax.request({
+                    url: destroy_url,
+                    method: 'POST',
+                    params: {
+                      action: 'delete',
+                      items: ids
+                    },
+                    success: function(resp,opt){
+                      //grid.getStore().remove(sel);
+                      store.reload();                        
+                    },
+                    failure: function(resp,opt){
+                      Ext.Msg.alert('Error', 'Unable to delete product');
+                    }
+                  });
+                }
+              }
+            });
+          };
         }
       }
     ],

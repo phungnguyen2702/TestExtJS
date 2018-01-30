@@ -7,7 +7,8 @@ var store = new Ext.data.JsonStore({
     'title',
     'image',
     'description',
-    'price'
+    'price',
+    'product_type'
   ]
 });
 
@@ -22,7 +23,7 @@ var ds_model = Ext.data.Record.create([
   'image',
   'description',
   {name: 'price', type: 'float'},
-  {name: 'Delete', type: 'bool'}
+  {name: 'product_type', type: 'integer'}
 ]);
 
 
@@ -78,7 +79,7 @@ Ext.onReady( function(){
       {header: 'Image', dataIndex: 'image', sortable: true, editor: text_edit},
       {header: 'Description', dataIndex: 'description', sortable: true, editor: text_edit},
       {header: 'Price', dataIndex: 'price', sortable: true, editor: number_edit},
-      {header: 'Delete', dataIndex: 'Delete', width: 55, sortable: true}
+      {header: 'Type', dataIndex: 'product_type', width: 55, sortable: true, editor: number_edit}
     ],
     tbar:[
       {
@@ -117,6 +118,12 @@ Ext.onReady( function(){
               fieldLabel: 'Price',
               id: 'price',
               width: 180
+            },
+            {
+              xtype: 'numberfield',
+              fieldLabel: 'Type',
+              id: 'type',
+              width: 180
             }],
             
             buttons: [{
@@ -127,7 +134,8 @@ Ext.onReady( function(){
                 var title = Ext.getCmp('title').getValue();
                 image = Ext.getCmp('image').getValue(),
                 description = Ext.getCmp('description').getValue(),
-                price = Ext.getCmp('price').getValue()
+                price = Ext.getCmp('price').getValue(),
+                type = Ext.getCmp('type').getValue()
                 Ext.Ajax.request({
                   url: create_url,
                   params: {
@@ -135,7 +143,8 @@ Ext.onReady( function(){
                       title: title,
                       image: image,
                       description: description,
-                      price: price
+                      price: price,
+                      product_type: type
                   },
                   success: function(resp,opt){
                     if(title == ""){

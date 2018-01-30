@@ -5,11 +5,24 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
-    respond_to do |format|
+    @productss
+    for i in 1..3
+      @productss = @products.where(product_type: i)
+    end 
+
+    respond_to do |format|  
       format.html 
-      format.json { render json:  @products }#create file Json 
+      format.json { render json:  @productss }#create file Json 
     end
   end
+  def index2
+    Product.find_by_sql 'select * from products order by price ASC limit 10'
+    # lấy top 3 sp giá thấp nhất của mỗi loại
+    Product.find_by_sql 'Select *, rank() 
+              over(partition by product_type order by product_type, price ASC) AS stt
+              From products'
+  end
+ 
   # GET /products/1
   # GET /products/1.json
   # def show
@@ -76,11 +89,12 @@ class ProductsController < ApplicationController
     @product.update_column :"#{params["field"]}", params["value"]
   end
   def destroy_extjs
-    arr = params['items'].split(',')
-    arr.collect!{ |item| item.to_i}
+    arr = params['items'].split(',').map(&:to_i)
+    #arr.map!{|item| item.to_i}
     #Product.where(id: arr).destroy_all
     Product.destroy(arr)
   end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product

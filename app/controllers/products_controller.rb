@@ -5,22 +5,29 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
-    @productss
-    for i in 1..3
-      @productss = @products.where(product_type: i)
-    end 
-
-    respond_to do |format|  
+    hash_products = Hash.new
+    
+    @products.each { |p|
+      hash_products[p.product_type] = Array.new if !hash_products[p.product_type]
+      hash_products[p.product_type] << p
+    }
+    
+    top_price_min_products = Array.new
+    hash_products.each_value{ |value| top_price_min_products += value.sort_by(&:price)[0..4]}
+    top_price_min_products.sort_by!(&:product_type)
+    #binding.pry
+    respond_to do |format|
       format.html 
-      format.json { render json:  @productss }#create file Json 
+      format.json { render json:  top_price_min_products }#create file Json 
     end
   end
   def index2
     Product.find_by_sql 'select * from products order by price ASC limit 10'
     # lấy top 3 sp giá thấp nhất của mỗi loại
-    Product.find_by_sql 'Select *, rank() 
-              over(partition by product_type order by product_type, price ASC) AS stt
-              From products'
+    Product.find_by_sql 'Select * from( Select *, row_number() 
+                                        over(partition by product_type order by price ASC) as pt 
+                                        from products as P ) as P 
+                                  where P.pt <= 5'
   end
  
   # GET /products/1

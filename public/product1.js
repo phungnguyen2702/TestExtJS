@@ -131,11 +131,11 @@ Ext.onReady( function(){
               text: 'Create',
               key: Ext.EventObject.ENTER,
               handler: function(){
-                var title = Ext.getCmp('title').getValue();
-                image = Ext.getCmp('image').getValue(),
-                description = Ext.getCmp('description').getValue(),
-                price = Ext.getCmp('price').getValue(),
-                type = Ext.getCmp('type').getValue()
+                var title = Ext.getCmp('title').getValue(),
+                    image = Ext.getCmp('image').getValue(),
+                    description = Ext.getCmp('description').getValue(),
+                    price = Ext.getCmp('price').getValue(),
+                    type = Ext.getCmp('type').getValue()
                 Ext.Ajax.request({
                   url: create_url,
                   params: {

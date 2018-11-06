@@ -12,7 +12,7 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
 
-    # @products = Product.all
+     @products = Product.all
     # hash_products = Hash.new
     
     # @products.each { |p|
@@ -28,17 +28,17 @@ class ProductsController < ApplicationController
     #   top_price_min_products += value.sort_by(&:title) if value.first.product_type == 3
     # }
     # top_price_min_products.sort_by!(&:product_type)
-    top_price_min_products = Product.find_by_sql 'Select * from( Select *, row_number()
-                                                        over(partition by product_type order by price ASC) as pt
-                                                        from (Select distinct on (product_type, price) * from products) as P ) as P
-                                                  where P.pt <= 5
-                                                  order by
-                                                        case when product_type = 1 then price end,
-                                                        case when product_type = 2 then title end,
-                                                        case when product_type = 3 then id end'
+    # top_price_min_products = Product.find_by_sql 'Select * from( Select *, row_number()
+    #                                                     over(partition by product_type order by price ASC) as pt
+    #                                                     from (Select distinct on (product_type, price) * from products) as P ) as P
+    #                                               where P.pt <= 5
+    #                                               order by
+    #                                                     case when product_type = 1 then price end,
+    #                                                     case when product_type = 2 then title end,
+    #                                                     case when product_type = 3 then id end'
     respond_to do |format|
       format.html 
-      format.json {render json:  top_price_min_products }#create file Json 
+      format.json {render json:  @products }#create file Json 
     end
   end
   
